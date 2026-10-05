@@ -1,5 +1,4 @@
 'use strict';
-const productNames={seat:'Dog Car Seat Covers',boot:'Dog Boot Liners',sets:'Custom Dog Travel Sets'};
 const menu=document.querySelector('.menu-toggle');
 const nav=document.querySelector('#main-navigation');
 function closeMenu(){nav.classList.remove('open');menu.setAttribute('aria-expanded','false');menu.setAttribute('aria-label','Open menu');}
@@ -12,7 +11,7 @@ const quoteDialog=document.querySelector('#quote-dialog');
 const modalForm=quoteDialog.querySelector('form');
 function invalidate(form){
  if(form.dataset.state==='sending')return;
- form.querySelector('.form-result').hidden=true;form.classList.remove('has-result');form.querySelector('.copy-status').textContent='';
+ form.querySelector('.form-result').hidden=true;form.classList.remove('has-result');
  form.dataset.state='idle';form.querySelector('.submit-quote').disabled=false;form.querySelector('.submit-quote').textContent='Get My Quote';
  form.querySelector('.form-status').textContent='';
 }
@@ -46,14 +45,13 @@ document.querySelectorAll('dialog').forEach(dialog=>{
  dialog.addEventListener('close',()=>{if(!document.querySelector('dialog[open]'))document.body.classList.remove('modal-open');});
 });
 document.querySelectorAll('[data-privacy]').forEach(button=>button.addEventListener('click',()=>{document.querySelector('#privacy-dialog').showModal();document.body.classList.add('modal-open');}));
-function showResult(form,kind,text){
- const sent=kind==='sent';
+function showError(form,kind){
  const result=form.querySelector('.form-result');
- result.dataset.state=sent?'sent':'error';
- result.querySelector('b').textContent=sent?'Thank you — your enquiry has been sent.':'Your enquiry could not be sent.';
- result.querySelector('p').textContent=sent?"We’ll reply to the email address you provided. Your request details are below.":kind==='timeout'?"We couldn’t confirm that your request was received. Your details are saved here; please wait a moment before trying again.":"Your details are still here. Please check your connection and try again in a moment.";
- result.querySelector('pre').textContent=text;result.hidden=false;form.classList.add('has-result');
- form.querySelector('.form-status').textContent=sent?'Enquiry sent.':'Enquiry not confirmed. Please try again.';
+ result.dataset.state='error';
+ result.querySelector('b').textContent='Your enquiry could not be sent.';
+ result.querySelector('p').textContent=kind==='timeout'?"We couldn’t confirm that your request was received. Please wait a moment before trying again.":"Your details are still here. Please check your connection and try again in a moment.";
+ result.hidden=false;form.classList.add('has-result');
+ form.querySelector('.form-status').textContent='';
  result.focus({preventScroll:true});result.scrollIntoView({behavior:window.matchMedia('(prefers-reduced-motion:reduce)').matches?'instant':'smooth',block:'nearest'});
 }
 document.querySelectorAll('.quote-form').forEach(form=>{
@@ -61,6 +59,7 @@ document.querySelectorAll('.quote-form').forEach(form=>{
  const endpoint=window.NOVPetsEnquiryConfig.endpoint;
  form.action=endpoint.replace('/ajax/','/');
  form.addEventListener('input',e=>{
+  if(e.target.name==='name')e.target.setCustomValidity('');
   invalidate(form);
   if(e.target.name==='product' && !form.querySelector('[name=product][value=sets]').checked){
    const context=form.querySelector('.quote-context');context.hidden=true;context.querySelector('span').textContent='';
@@ -70,12 +69,14 @@ document.querySelectorAll('.quote-form').forEach(form=>{
  form.addEventListener('submit',async e=>{
   e.preventDefault();
   if(form.dataset.state==='sending'||form.dataset.state==='sent')return;
+  const nameInput=form.querySelector('[name=name]');
+  nameInput.setCustomValidity(nameInput.value.trim()?'':'Please enter your name.');
   if(!form.reportValidity())return;
   const data=new FormData(form);
   const context=form.querySelector('.quote-context');
   // Keep the same reference for a retry so repeated deliveries can be recognised.
   if(form.dataset.state!=='error')form.dataset.requestId=window.crypto?.randomUUID?.()||`NOV-${Date.now()}-${Math.random().toString(36).slice(2,10)}`;
-  const {payload,text}=NOVPetsEnquiries.prepare({name:data.get('name'),email:data.get('email'),phone:data.get('phone'),products:data.getAll('product'),message:data.get('message'),context:!context.hidden?context.querySelector('span').textContent:'',page:location.href.split('#')[0],requestId:form.dataset.requestId,honey:data.get('_honey')});
+  const {payload}=NOVPetsEnquiries.prepare({name:data.get('name'),email:data.get('email'),phone:data.get('phone'),products:data.getAll('product'),message:data.get('message'),context:!context.hidden?context.querySelector('span').textContent:'',page:location.href.split('#')[0],requestId:form.dataset.requestId,honey:data.get('_honey')});
   form.dataset.state='sending';form.setAttribute('aria-busy','true');
   form.querySelector('.form-result').hidden=true;form.querySelector('.form-status').textContent='Sending your enquiry…';
   const controls=[...form.querySelectorAll('input,textarea,button')].filter(el=>!el.disabled);
@@ -83,14 +84,15 @@ document.querySelectorAll('.quote-form').forEach(form=>{
   const outcome=await NOVPetsEnquiries.send(endpoint,payload);
   controls.forEach(el=>el.disabled=false);form.setAttribute('aria-busy','false');
   form.dataset.state=outcome.kind==='sent'?'sent':'error';
-  form.querySelector('.submit-quote').disabled=outcome.kind==='sent';
-  form.querySelector('.submit-quote').textContent=outcome.kind==='sent'?'Request sent':'Try Again';
-  showResult(form,outcome.kind,text);
- });
- form.querySelector('.copy-request').addEventListener('click',async()=>{
-  const text=form.querySelector('.form-result pre').textContent;const status=form.querySelector('.copy-status');
-  try{if(!navigator.clipboard)throw new Error('Clipboard not available');await navigator.clipboard.writeText(text);status.textContent='Copied to clipboard.';}
-  catch{const pre=form.querySelector('.form-result pre');const range=document.createRange();range.selectNodeContents(pre);const selection=window.getSelection();selection.removeAllRanges();selection.addRange(range);status.textContent='Text selected. Use Copy on your device to keep it.';}
+  if(outcome.kind==='sent'){
+   form.reset();context.hidden=true;context.querySelector('span').textContent='';
+   form.querySelector('.submit-quote').disabled=true;
+   // The destination carries no buyer data in the URL or page content.
+   window.location.assign(new URL('thank-you.html',window.location.href).href);
+   return;
+  }
+  form.querySelector('.submit-quote').textContent='Try Again';
+  showError(form,outcome.kind);
  });
 });
 document.querySelectorAll('[data-year]').forEach(el=>el.textContent=new Date().getFullYear());

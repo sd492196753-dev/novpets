@@ -19,8 +19,7 @@
    'Page':clean(values.page),'Request ID':clean(values.requestId),
    _replyto:email,_subject:'NOV PETS — New quote enquiry',_template:'table',_honey:clean(values.honey)
   };
-  const text=['NOV PETS — Quote Request','',`Name: ${payload.name}`,`Email: ${email}`,`Phone / WhatsApp: ${payload['Phone / WhatsApp']}`,`Products: ${payload.Products}`,clean(values.context),`Message: ${payload.message}`,`Request ID: ${payload['Request ID']}`].filter((line,i)=>line||i===1).join('\n');
-  return {payload,text};
+  return {payload};
  }
  async function send(endpoint,payload,options={}){
   // Only a provider-issued opaque form ID belongs in the public site.
