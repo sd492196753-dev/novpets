@@ -10,9 +10,17 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')closeMenu();});
 window.matchMedia('(min-width:801px)').addEventListener('change',e=>{if(e.matches)closeMenu();});
 const quoteDialog=document.querySelector('#quote-dialog');
 const modalForm=quoteDialog.querySelector('form');
-function invalidate(form){form.querySelector('.form-result').hidden=true;form.classList.remove('has-result');form.querySelector('.copy-status').textContent='';}
+function invalidate(form){
+ if(form.dataset.state==='sending')return;
+ form.querySelector('.form-result').hidden=true;form.classList.remove('has-result');form.querySelector('.copy-status').textContent='';
+ form.dataset.state='idle';form.querySelector('.submit-quote').disabled=false;form.querySelector('.submit-quote').textContent='Get My Quote';
+ form.querySelector('.form-status').textContent='';
+}
 function openQuote(product='',context=''){
  closeMenu();
+ if(modalForm.dataset.state==='sending'){
+  if(!quoteDialog.open)quoteDialog.showModal();document.body.classList.add('modal-open');return;
+ }
  if(product){modalForm.querySelectorAll('[name=product]').forEach(input=>input.checked=input.value===product);}
  const block=modalForm.querySelector('.quote-context');
  block.querySelector('span').textContent=context;block.hidden=!context;
@@ -37,8 +45,21 @@ document.querySelectorAll('dialog').forEach(dialog=>{
  dialog.addEventListener('click',e=>{const r=dialog.getBoundingClientRect();if(e.target===dialog&&(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom))dialog.close();});
  dialog.addEventListener('close',()=>{if(!document.querySelector('dialog[open]'))document.body.classList.remove('modal-open');});
 });
-document.querySelector('[data-privacy]').addEventListener('click',()=>{document.querySelector('#privacy-dialog').showModal();document.body.classList.add('modal-open');});
+document.querySelectorAll('[data-privacy]').forEach(button=>button.addEventListener('click',()=>{document.querySelector('#privacy-dialog').showModal();document.body.classList.add('modal-open');}));
+function showResult(form,kind,text){
+ const sent=kind==='sent';
+ const result=form.querySelector('.form-result');
+ result.dataset.state=sent?'sent':'error';
+ result.querySelector('b').textContent=sent?'Thank you — your enquiry has been sent.':'Your enquiry could not be sent.';
+ result.querySelector('p').textContent=sent?"We’ll reply to the email address you provided. Your request details are below.":kind==='timeout'?"We couldn’t confirm that your request was received. Your details are saved here; please wait a moment before trying again.":"Your details are still here. Please check your connection and try again in a moment.";
+ result.querySelector('pre').textContent=text;result.hidden=false;form.classList.add('has-result');
+ form.querySelector('.form-status').textContent=sent?'Enquiry sent.':'Enquiry not confirmed. Please try again.';
+ result.focus({preventScroll:true});result.scrollIntoView({behavior:window.matchMedia('(prefers-reduced-motion:reduce)').matches?'instant':'smooth',block:'nearest'});
+}
 document.querySelectorAll('.quote-form').forEach(form=>{
+ form.dataset.state='idle';
+ const endpoint=window.NOVPetsEnquiryConfig.endpoint;
+ form.action=endpoint.replace('/ajax/','/');
  form.addEventListener('input',e=>{
   invalidate(form);
   if(e.target.name==='product' && !form.querySelector('[name=product][value=sets]').checked){
@@ -46,14 +67,25 @@ document.querySelectorAll('.quote-form').forEach(form=>{
   }
  });
  form.querySelector('.clear-context').addEventListener('click',()=>{const context=form.querySelector('.quote-context');context.hidden=true;context.querySelector('span').textContent='';invalidate(form);});
- form.addEventListener('submit',e=>{
+ form.addEventListener('submit',async e=>{
   e.preventDefault();
+  if(form.dataset.state==='sending'||form.dataset.state==='sent')return;
   if(!form.reportValidity())return;
   const data=new FormData(form);
   const context=form.querySelector('.quote-context');
-  const selected=data.getAll('product').map(key=>productNames[key]).filter(Boolean);
-  const text=['NOV PETS — Quote Request','Design preview — not sent','',`Name: ${String(data.get('name')).trim()||'Not provided'}`,`Email: ${String(data.get('email')).trim()}`,`Phone / WhatsApp: ${String(data.get('phone')||'').trim()||'Not provided'}`,`Products: ${selected.join(', ')||'To discuss'}`,!context.hidden?context.querySelector('span').textContent:'',`Message: ${String(data.get('message')).trim()||'Please share product and quotation options.'}`].filter((line,i)=>line||i===2).join('\n');
-  const result=form.querySelector('.form-result');result.querySelector('pre').textContent=text;result.hidden=false;form.classList.add('has-result');result.focus({preventScroll:true});result.scrollIntoView({behavior:window.matchMedia('(prefers-reduced-motion:reduce)').matches?'instant':'smooth',block:'nearest'});
+  // Keep the same reference for a retry so repeated deliveries can be recognised.
+  if(form.dataset.state!=='error')form.dataset.requestId=window.crypto?.randomUUID?.()||`NOV-${Date.now()}-${Math.random().toString(36).slice(2,10)}`;
+  const {payload,text}=NOVPetsEnquiries.prepare({name:data.get('name'),email:data.get('email'),phone:data.get('phone'),products:data.getAll('product'),message:data.get('message'),context:!context.hidden?context.querySelector('span').textContent:'',page:location.href.split('#')[0],requestId:form.dataset.requestId,honey:data.get('_honey')});
+  form.dataset.state='sending';form.setAttribute('aria-busy','true');
+  form.querySelector('.form-result').hidden=true;form.querySelector('.form-status').textContent='Sending your enquiry…';
+  const controls=[...form.querySelectorAll('input,textarea,button')].filter(el=>!el.disabled);
+  controls.forEach(el=>el.disabled=true);form.querySelector('.submit-quote').textContent='Sending…';
+  const outcome=await NOVPetsEnquiries.send(endpoint,payload);
+  controls.forEach(el=>el.disabled=false);form.setAttribute('aria-busy','false');
+  form.dataset.state=outcome.kind==='sent'?'sent':'error';
+  form.querySelector('.submit-quote').disabled=outcome.kind==='sent';
+  form.querySelector('.submit-quote').textContent=outcome.kind==='sent'?'Request sent':'Try Again';
+  showResult(form,outcome.kind,text);
  });
  form.querySelector('.copy-request').addEventListener('click',async()=>{
   const text=form.querySelector('.form-result pre').textContent;const status=form.querySelector('.copy-status');

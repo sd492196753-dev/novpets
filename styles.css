@@ -16,3 +16,6 @@
 /* Individually photographed-style placeholder portraits, each in its own setting. */
 .testimonial-card img.buyer-avatar{display:block;width:64px;height:64px;flex-shrink:0;object-fit:cover;object-position:center;background:none;border-radius:5px}
 @media(max-width:600px){.testimonial-card img.buyer-avatar{width:60px;height:60px}}
+
+/* Live enquiry states */
+.form-honeypot{position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden}.form-privacy-note{font-size:11px;color:var(--muted);margin-top:9px}.privacy-inline{padding:0;background:transparent;text-decoration:underline;font-size:inherit;min-height:28px}.form-status{font-size:12px;margin-top:12px;color:var(--ink)}.form-status:empty{display:none}.quote-form[aria-busy="true"] .submit-quote{cursor:wait;opacity:.7}.quote-form .submit-quote:disabled{cursor:default}.form-result[data-state="sent"]{background:#edf5ef;border-left:3px solid var(--ink)}.form-result[data-state="error"]{background:#fff3ed;border-left:3px solid #b03905}.form-result[data-state="error"] b{color:#96340b}
