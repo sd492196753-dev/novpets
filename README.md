@@ -1,19 +1,25 @@
-# NOVpets — B2B dog travel sourcing website
+# NOVpets — Dog Travel Products for Wholesale & Private Label
 
-Live website: https://sd492196753-dev.github.io/novpets/
+[NOVpets official website](https://sd492196753-dev.github.io/novpets/)
 
-GitHub Pages publishes the main branch from the repository root.
+NOVpets (NOV PETS) is a Shanghai-based B2B sourcing and supply partner for dog car seat covers, boot and cargo liners, and coordinated private label dog travel sets. We work with Australian and New Zealand pet brands, importers, wholesalers and retailers planning their product ranges.
 
-NOVpets (NOV PETS) is a Shanghai-based B2B sourcing and supply partner for dog car seat covers, boot liners and coordinated private label travel sets. A registered legal company name and Australian local stock are not claimed.
+## Product sourcing
 
-Seven business pages include unique search metadata, canonical URLs, structured data, linked buying guides and a sitemap. The thank-you and error pages remain noindex. Concept images, illustrative figures and sample testimonials are disclosed; they are not verified supplier evidence.
+- [Wholesale dog car seat covers and hammock covers](https://sd492196753-dev.github.io/novpets/dog-car-seat-covers.html)
+- [Wholesale dog boot and cargo liners](https://sd492196753-dev.github.io/novpets/dog-boot-liners.html)
+- [Private label dog travel sets](https://sd492196753-dev.github.io/novpets/custom-dog-travel-sets.html)
+- [Wholesale supply and quote terms](https://sd492196753-dev.github.io/novpets/wholesale.html)
 
-Enquiries use the activated opaque FormSubmit endpoint. Buyer name and email are required. Successful submissions lead to a simple thank-you page without exposing the private receiving email.
+## Supplier information and buyer guides
 
-## Search status — 5 October 2026
+- [NOVpets supplier profile — Shanghai, China](https://sd492196753-dev.github.io/novpets/novpets-supplier-profile.html)
+- [Sourcing dog travel products for Australia](https://sd492196753-dev.github.io/novpets/sourcing-dog-travel-products-australia.html)
+- [Sourcing dog travel products for New Zealand](https://sd492196753-dev.github.io/novpets/sourcing-dog-travel-products-new-zealand.html)
+- [Dog travel product buyer guide](https://sd492196753-dev.github.io/novpets/buyer-guide.html)
 
-Google Search Console ownership is verified. The homepage live test passed, and its indexing request was added to Google's priority crawl queue. Indexing is not yet confirmed.
+Ask about product options, samples, brand customisation and retail packaging through the quote form on the website. Model-specific MOQ, sample costs and delivery terms are confirmed with your quotation. Australian or New Zealand local stock is not claimed.
 
-The sitemap was submitted, but the initial report and same-day recheck showed “could not fetch”. The public sitemap responds successfully and contains seven valid canonical URLs. Google-side processing remains unconfirmed.
+## Website source
 
-A signed-in Chinese Google search for novpets still autocorrected to neopets; keeping the original spelling also did not show this website in the observed results. Brand discovery is not yet achieved. Indexing, rankings and AI recommendations are not guaranteed.
+This repository publishes the NOVpets website through GitHub Pages from the main branch and repository root. Concept images, illustrative figures and sample testimonials on the site are disclosed and are not verified supplier evidence. Buyer name and email are required in enquiries; the private receiving address is not exposed in the website interface.
