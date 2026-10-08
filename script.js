@@ -85,6 +85,8 @@ document.querySelectorAll('.quote-form').forEach(form=>{
   controls.forEach(el=>el.disabled=false);form.setAttribute('aria-busy','false');
   form.dataset.state=outcome.kind==='sent'?'sent':'error';
   if(outcome.kind==='sent'){
+   // Count only confirmed deliveries; never send buyer fields to Analytics.
+   try{await window.NOVPetsAnalytics?.enquirySent(form.id);}catch(_){}
    form.reset();context.hidden=true;context.querySelector('span').textContent='';
    form.querySelector('.submit-quote').disabled=true;
    // The destination carries no buyer data in the URL or page content.
