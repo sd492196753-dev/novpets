@@ -5,7 +5,7 @@
     else root.NOVPetsEnquiries=api;
 })(typeof globalThis!=='undefined'?globalThis:this,function(){
     'use strict';
-    const productNames={seat:'Dog Car Seat Covers',boot:'Dog Boot Liners',sets:'Custom Dog Travel Sets'};
+    const productNames={seat:'Dog Car Seat Covers',boot:'Dog Boot Liners',grooming:'Pet Grooming Brushes',feeding:'Pet Bowls & Water Dispensers'};
     // Browsers may autofill an off-screen spam trap despite autocomplete="off".
        // Ignore only browser-marked autofill; keep rejecting other populated traps.
        function readHoneypot(input){
@@ -23,7 +23,7 @@
                       name:clean(values.name)||'Not provided',email,
                       'Phone / WhatsApp':clean(values.phone)||'Not provided',
                       Products:products.join(', ')||'To discuss',
-                      'Set configuration':clean(values.context)||'Not selected',
+                      'Range selection':clean(values.context)||'Not selected',
                       message:clean(values.message)||'Please share product and quotation options.',
                       'Page':clean(values.page),'Request ID':clean(values.requestId),
                       _replyto:email,_subject:'NOV PETS — New quote enquiry',_template:'table',_honey:clean(values.honey)

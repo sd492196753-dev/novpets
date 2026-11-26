@@ -47,9 +47,9 @@ document.querySelectorAll('.set-builder').forEach(builder=>{
     const branding=()=>[...builder.querySelectorAll('[name=custom]:checked')].map(input=>input.value);
     builder.addEventListener('change',()=>{const count=components().length;builder.querySelector('.builder-count').textContent=`${count} ${count===1?'item':'items'} selected`;builder.querySelector('.builder-hint').textContent='Your selections will be included in your enquiry.';});
     builder.querySelector('[data-build-quote]').addEventListener('click',()=>{
-           if(!components().length){builder.querySelector('.builder-hint').textContent='Choose at least one product to start your set.';builder.querySelector('[name=component]').focus();return;}
-           const context=`Your set: ${components().join(', ')}\nCustomisation: ${branding().join(', ')||'To discuss'}`;
-           openQuote('sets',context);
+           if(!components().length){builder.querySelector('.builder-hint').textContent='Choose at least one product to start your range.';builder.querySelector('[name=component]').focus();return;}
+           const context=`Your range: ${components().join(', ')}\nCustomisation: ${branding().join(', ')||'To discuss'}`;
+           openQuote('',context);
     });
 });
 document.querySelectorAll('dialog').forEach(dialog=>{
@@ -75,9 +75,6 @@ document.querySelectorAll('.quote-form').forEach(form=>{
     form.addEventListener('input',e=>{
            if(e.target.name==='name')e.target.setCustomValidity('');
            invalidate(form);
-           if(e.target.name==='product' && !form.querySelector('[name=product][value=sets]').checked){
-                      const context=form.querySelector('.quote-context');context.hidden=true;context.querySelector('span').textContent='';
-           }
     });
     form.querySelector('.clear-context').addEventListener('click',()=>{const context=form.querySelector('.quote-context');context.hidden=true;context.querySelector('span').textContent='';invalidate(form);});
     form.addEventListener('submit',async e=>{

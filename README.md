@@ -1,14 +1,15 @@
-# NOVpets — Dog Travel Products for Wholesale & Private Label
+# NOVpets — Dog Travel, Grooming & Feeding Products for Wholesale & Private Label
 
 [NOVpets official website](https://novpets.com/)
 
-NOVpets (NOV PETS) is a Shanghai-based B2B sourcing and supply partner for dog car seat covers, boot and cargo liners, and coordinated private label dog travel sets. We work with Australian and New Zealand pet brands, importers, wholesalers and retailers planning their product ranges.
+NOVpets (NOV PETS) is a Shanghai-based B2B sourcing and supply partner for dog car seat covers and boot and cargo liners (travel line), plus self-cleaning grooming brushes, double pet bowls and gravity water dispensers (grooming & feeding line). We work with Australian and New Zealand pet brands, importers, wholesalers and retailers planning their product ranges.
 
 ## Product sourcing
 
 - [Wholesale dog car seat covers and hammock covers](https://novpets.com/dog-car-seat-covers.html)
 - [Wholesale dog boot and cargo liners](https://novpets.com/dog-boot-liners.html)
-- [Private label dog travel sets](https://novpets.com/custom-dog-travel-sets.html)
+- [Self-cleaning pet grooming brushes](https://novpets.com/pet-grooming-brushes.html)
+- [Pet bowls and gravity water dispensers](https://novpets.com/pet-bowls-water-dispensers.html)
 - [Wholesale supply and quote terms](https://novpets.com/wholesale.html)
 
 ## Supplier information and buyer guides
