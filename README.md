@@ -2,7 +2,7 @@
 
 [NOVpets official website](https://novpets.com/)
 
-NOVpets (NOV PETS) is a Shanghai-based B2B sourcing and supply partner for dog car seat covers and boot and cargo liners (travel line), plus self-cleaning grooming brushes, double pet bowls and gravity water dispensers (grooming & feeding line). We work with Australian and New Zealand pet brands, importers, wholesalers and retailers planning their product ranges.
+NOVpets (NOV PETS) is a Shanghai-based B2B sourcing and supply partner across three categories: dog travel (car seat covers, boot and cargo liners), pet grooming (self-cleaning slicker brushes) and feeding & water (double bowls, gravity water dispensers). We work with Australian and New Zealand pet brands, importers, wholesalers and retailers planning their product ranges.
 
 ## Product sourcing
 
