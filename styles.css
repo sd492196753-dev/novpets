@@ -68,3 +68,4 @@ body.modal-open .whatsapp-float{visibility:hidden}
 @media (max-width:1000px){.product-grid.four{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:760px){.product-grid.two,.product-grid.four,.model-grid{grid-template-columns:1fr}.line-label{flex-wrap:wrap}.line-label p{margin:0;width:100%}}
 .product-visual .scene-shot,.model-visual .scene-shot,.detail-visual>.scene-shot{object-fit:cover}
+.custom-right>.set-builder:first-child{border-radius:4px}
